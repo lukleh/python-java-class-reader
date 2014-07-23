@@ -16,7 +16,6 @@ with open('opcodes.csv', 'r') as csvfile:
             code['params'] = int(row[2][0])
         else:
             code['params'] = -1
-            print row[2]
         opcodes[val] = code
 
 
