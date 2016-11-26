@@ -1,9 +1,13 @@
 Python Java class reader
 ========================
 
-Simple Java class reader that parses also opcodes. Will probably break on obfuscated classes.
+Simple Java class reader that parses also opcodes.
 
-`python reader.py file.class`
+`python readclass.py file.class`
+
+Read classes in jar.
+
+`python readjar.py file.jar`
 
 *  No external dependencies
-*  Tested on Python 2.7
+*  Tested on Python 3.5
