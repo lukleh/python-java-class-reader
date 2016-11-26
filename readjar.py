@@ -13,9 +13,12 @@ def read_jar(f, parse=True):
                 has_classes = True
                 if parse:
                     with myzip.open(zinfo.filename) as myfile:
-                        jc = readclass.JavaClass(myfile.read())
-                        jc.decode()
-                        jc.print_out()
+                        try:
+                            jc = readclass.JavaClass(myfile.read())
+                            jc.decode()
+                            #jc.print_out()
+                        except Exception as e:
+                            print(e)
     return has_classes
 
 if __name__ == '__main__':

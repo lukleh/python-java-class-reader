@@ -346,7 +346,10 @@ attribute_map = {ATTRIBUTE_CONSTANT_VALUE: AttributeConstantValue,
 
 def make_attribute_info(jclass):
     attribute_name_index = jclass.read_uint16()
-    name = jclass.get_cpi(attribute_name_index).value
+    cp_entry = jclass.get_cpi(attribute_name_index)
+    if type(cp_entry) != CPIUTF8:
+        raise Exception('attribute at %d is not UTF8' % attribute_name_index)
+    name = cp_entry.value
     cl = attribute_map.get(name, AttributeOther)
     return cl(jclass, attribute_name_index)
 
@@ -501,20 +504,41 @@ class JavaClass:
         if mn != MAGIC_NUMBERS:
             raise Exception('magic numbers %s do not match %s' % (MAGIC_NUMBERS, mn))
         self.minor_version = self.read_uint16()
+        print('minor version: %s' % self.minor_version)
         self.major_version = self.read_uint16()
+        print('major version: %s' % self.major_version)
+        print('name version: %s' % self.version2string())
         self.constant_pool_size = self.read_uint16()
+        print('pool size: %s' % self.constant_pool_size)
         self.read_constant_pool()
+        for i, cpi in enumerate(self.constant_pool):
+            print(i, cpi)
         self.access_flags = self.read_uint16()
+        print('access flags: %s' % self.access_flags)
         self.this_class = self.read_uint16()
+        print('this class index: %s' % self.this_class)
         self.super_class = self.read_uint16()
+        print('super class index: %s' % self.super_class)
         self.interfaces_count = self.read_uint16()
+        print('interfaces count: %s' % self.interfaces_count)
         self.read_interfaces()
+        for ifc in self.interfaces:
+            print(ifc)
         self.fields_count = self.read_uint16()
+        print('fields count: %s' % self.fields_count)
         self.read_fields()
+        for fld in self.fields:
+            print(fld)
         self.methods_count = self.read_uint16()
+        print('methods count: %s' % self.methods_count)
         self.read_methods()
+        for mtd in self.methods:
+            print(mtd)
         self.attributes_count = self.read_uint16()
+        print('attributes count: %s' % self.attributes_count)
         self.read_attributes()
+        for att in self.attributes:
+            print(att)
         try:
             self.read_byte()
         except StopIteration:
